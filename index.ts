@@ -3,9 +3,14 @@
 
 "use strict";
 
+/*
 import * as fs from 'fs';
 import * as http from 'http';
 import * as request from 'request';
+*/
+declare var fs: any;
+declare var http: any;
+var request = require('request');
 
 export async function timeout(milliseconds: number): Promise<void> {
     return new Promise<void>(resolve => 
@@ -112,10 +117,10 @@ export module Http {
     }
 
     export class HttpResponse {
-        private message: http.IncomingMessage;
+        private message: any;
         private body: string;
         
-        constructor(message: http.IncomingMessage, body: string) {
+        constructor(message: any, body: string) {
             this.message = message;
             this.body = body;
         }

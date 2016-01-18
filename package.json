@@ -1,6 +1,6 @@
 {
   "name": "async-fx",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A collection of useful asynchronous utilities for use with TypeScript async/await",
   "main": "index.js",
   "scripts": {

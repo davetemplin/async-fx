@@ -65,7 +65,7 @@ $ npm install -g typescript
 ```
 Write some code...
 ```js
-import {Http} from '../index';
+import {Http} from 'async-fx';
 (async function () {
     var zip = '92679';
     var url = 'http://query.yahooapis.com/v1/public/yql?q=select+item+from+weather.forecast+where+location%3D%22'+ zip + '%22&format=json';
