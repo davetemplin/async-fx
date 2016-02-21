@@ -31,7 +31,7 @@ $ tsd install node
 
 Write some code...
 ```js
-import {File, Parallel, WebRequest} from 'aync-fx';
+import {File, Parallel, WebRequest} from 'async-fx';
 (async function () {
     var urls = ['http://google.com/', 'http://bing.com/', 'http://yahoo.com/'];
     var list = await Parallel.map(urls, async function (url): Promise<string> {
