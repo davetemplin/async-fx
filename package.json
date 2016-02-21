@@ -1,6 +1,6 @@
 {
   "name": "async-fx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simplifies web, file, and parallel tasks with TypeScript async/await",
   "main": "index.js",
   "scripts": {
