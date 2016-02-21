@@ -1,7 +1,7 @@
 {
   "name": "async-fx",
-  "version": "0.1.3",
-  "description": "A collection of useful asynchronous utilities for use with TypeScript async/await",
+  "version": "1.0.0",
+  "description": "Simplifies web, file, and parallel tasks with TypeScript async/await",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -13,7 +13,15 @@
   "keywords": [
     "async",
     "await",
-    "typescript"
+    "asyncawait",
+    "async/await",
+    "async-await",
+    "typescript",
+    "fs",
+    "file",
+    "request",
+    "web",
+    "parallel"
   ],
   "author": {
     "name": "Dave Templin",
@@ -30,6 +38,8 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
-    "request": "^2.67.0"
+    "async-file": "^1.0.0",
+    "async-parallel": "^1.0.2",
+    "web-request": "^1.0.1"
   }
 }

@@ -1,85 +1,97 @@
 # async-fx
-A collection of useful asynchronous utilities for use with TypeScript async/await
+> Simplifies web, file, and parallel tasks with TypeScript async/await
 
+This package makes it easier to perform web requests, access files, call asynchronous functions in parallel using [TypeScript](http://www.typescriptlang.org/) and [**async/await**](https://blogs.msdn.microsoft.com/typescript/2015/11/03/what-about-asyncawait/). 
 
-This package makes it easier to write code for various tasks in Node.js using [**async-await**](https://en.wikipedia.org/wiki/Await) with [**TypeScript**](http://blogs.msdn.com/b/typescript/archive/2015/11/03/what-about-async-await.aspx). 
+This package bundles the following: (each of which is also available individually if desired)
+* [**web-request**](https://www.npmjs.com/package/web-request)
+* [**async-file**](https://www.npmjs.com/package/async-file)
+* [**async-parallel**](https://www.npmjs.com/package/async-parallel)
 
-> **Warning:** This package requires targeting EcmaScript 6 (ES6) and Node v4, which is somewhat bleeding edge at the moment. Also this package is currently in an expirmental state and is not feature complete. Use at your own risk!
+## Getting Started
 
-The main goal of this package is wrap the core [Node.js API](https://nodejs.org/api/http.html), replacing any callback functions with an equivalent async function.
-In several cases, alternative definitions of various functions are provided to further enhance the development experience and take better advantage of TypeScript and async/await.
+Make sure you're running Node v4 and TypeScript 1.7 or higher...
+```
+$ node -v
+v4.2.6
+$ npm install -g typescript tsd
+$ tsc -v
+Version 1.7.5
+```
 
-## Examples
+Install the *async-fx* package...
+```
+$ npm install async-fx
+```
 
-### File.readTextFile
+Install required typings definitions for the Node.js API...
+```
+$ tsd install node
+```
+
+Write some code...
+```js
+import {File, Parallel, WebRequest} from 'aync-fx';
+(async function () {
+    var urls = ['http://google.com/', 'http://bing.com/', 'http://yahoo.com/'];
+    var list = await Parallel.map(urls, async function (url): Promise<string> {
+        var response = await WebRequest.get(url);
+        return response.content;
+    });
+    await Parallel.each(list, async function (data) {
+        var name = /<title>(.*)<\/title>/.exec(data)[1] + '.html';
+        await File.writeTextFile(name, data);
+        console.log('file "' + name + '" written');
+    });
+    console.log('done');
+})();
+```
+Save the above to a file (index.ts), build and run it!
+```
+$ tsc index.ts typings/node/node.d.ts --target es6 --module commonjs
+$ node index.js
+file "Google.html" written
+file "Yahoo.html" written
+file "Bing.html" written
+done
+```
+
+## More Examples
+
 Read a set of three text files, one at a time...
 ```js
-import {File} from 'aync-fx';
 var data1 = await File.readTextFile('data1.txt');
 var data2 = await File.readTextFile('data2.txt');
 var data3 = await File.readTextFile('data3.txt');
 ```
 
-### Http.getJson
-Get the current weather forecast...
+Get the current weather forecast from a JSON feed...
 ```js
-import {Http} from 'async-fx';
-var zip = '92679';
-var url = 'http://query.yahooapis.com/v1/public/yql?q=select+item+from+weather.forecast+where+location%3D%22'+ zip + '%22&format=json';
-var data = await Http.getJson<any>(url);
+var url = 'http://query.yahooapis.com/v1/public/yql?q=select+item+from+weather.forecast+where+location%3D%2292679%22&format=json';
+var data = await WebRequest.json<any>(url);
 console.log(data.query.results.channel.item.forecast);
 ```
 
-### Parallel.each
 Append a line into an arbitrary series of text files, processing each operation in parallel...
 ```js
-import {File, Parallel} from 'aync-fx';
 var files = ['data1.log', 'data2.log', 'data3.log'];
-Parallel.each(files, async function (file) {
+await Parallel.each(files, async function (file) {
     await File.writeTextFile(file, '\nPASSED!\n', null, File.OpenFlags.append);
 });
 ```
 
-### Parallel.map
 Get the top level page content from an arbitrary series of urls, running each request in parallel...
 ```js
-import {Http, Parallel} from 'aync-fx';
 var urls = ['http://google.com/', 'http://bing.com/', 'http://yahoo.com/'];
-var result = Parallel.map(urls, async function (url): Promise<stirng> {
-    var response = await Http.createRequest(url).getResponse();
+var result = await Parallel.map(urls, async function (url): Promise<string> {
+    var response = await WebRequest.get(url);
     return response.content;
 });
 ```
 
-## Getting Started
-
-Make sure you're running Node v4...
-```
-$ node -v
-v4.2.4
-```
-Install everything we need...
-```
-$ npm install async-fx
-$ npm install -g typescript
-```
-Write some code...
+Get two pages sleeping for 2 seconds in between...
 ```js
-import {Http} from 'async-fx';
-(async function () {
-    var zip = '92679';
-    var url = 'http://query.yahooapis.com/v1/public/yql?q=select+item+from+weather.forecast+where+location%3D%22'+ zip + '%22&format=json';
-    var data = await Http.getJson<any>(url);
-    console.log(data.query.results.channel.item.forecast);
-})();
-```
-Save the above to a file (index.ts), build and run it!
-```
-$ tsc index.ts --target es6 --module commonjs
-$ node index.js
-[ { code: '27', date: '17 Jan 2016', day: 'Sun', high: '69', low: '45', text: 'Mostly Cloudy' },
-  { code: '26', date: '18 Jan 2016', day: 'Mon', high: '66', low: '46', text: 'Cloudy' },
-  { code: '39', date: '19 Jan 2016', day: 'Tue', high: '68', low: '47', text: 'PM Showers' },
-  { code: '30', date: '20 Jan 2016', day: 'Wed', high: '70', low: '45', text: 'AM Clouds/PM Sun' },
-  { code: '30', date: '21 Jan 2016', day: 'Thu', high: '77', low: '45', text: 'Partly Cloudy' } ]
+var page1 = await WebRequest.get('http://www.yahoo.com/news');
+await sleep(2000);
+var page2 = await WebRequest.get('http://www.yahoo.com/weather');
 ```
