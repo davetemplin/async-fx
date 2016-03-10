@@ -40,6 +40,6 @@
   "dependencies": {
     "async-file": "^1.0.0",
     "async-parallel": "^1.0.2",
-    "web-request": "^1.0.1"
+    "web-request": "^1.0.3"
   }
 }
