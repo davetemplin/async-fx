@@ -1,6 +1,8 @@
-src
 test
-samples
+typings
 .vscode
 index.ts
+main.*
 *.js.map
+tsconfig.json
+tsd.json

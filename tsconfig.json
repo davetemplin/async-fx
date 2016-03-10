@@ -9,12 +9,9 @@
     "target": "es6"
   },
   "files": [
-    "typings/chai/chai.d.ts",
-    "typings/mocha/mocha.d.ts",
-    "typings/node/node.d.ts",
-    "typings/request/request.d.ts",
+    "typings/tsd.d.ts",
     "index.ts",
-    "test/test.ts",
-    "samples/weather.ts"
+    "main.ts",
+    "test/test.ts"
   ]
 }
